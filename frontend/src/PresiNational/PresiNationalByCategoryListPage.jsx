@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
-const PresiSectionByCategoryListPage = () => {
+const PresiNationalByCategoryListPage = () => {
   //Récupération de l'id de l'utilisateur qui se trouve dans l'url
   const catId = useParams().id;
 
@@ -71,4 +71,4 @@ const PresiSectionByCategoryListPage = () => {
   );
 };
 
-export default PresiSectionByCategoryListPage;
+export default PresiNationalByCategoryListPage;

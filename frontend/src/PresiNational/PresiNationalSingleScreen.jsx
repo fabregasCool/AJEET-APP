@@ -17,7 +17,7 @@ const PresiNationalSingleScreen = () => {
   //Declaration de notre variable
   //presiNational est la variable dans laquelle se trouve les informations d'un article(presiNational)
   const [presiNational, setPresiNatioinal] = useState({});
-  //const [presidents, setPrésidents] = useState([]); //Variable pour afficher les prési en recommandation
+  const [presidents, setPrésidents] = useState([]); //Variable pour afficher les prési en recommandation
 
   //Atteindre l'url
   const location = useLocation();
@@ -28,21 +28,21 @@ const PresiNationalSingleScreen = () => {
   const navigate = useNavigate();
 
   //Recuperer les presidents en fonction de la categorie en passant par l'id du president de section
-  // useEffect(() => {
-  //   const fetcchAllUsers = async () => {
-  //     try {
-  //       const res = await axios.get(
-  //         'http://localhost:1000/api/presiSections/ByCategoryWhithPresiSectionId/' +
-  //           presiNationalId
-  //       ); //Recupère tous les présidents par sections ou categories de sections
-  //       console.log(res);
-  //       setPrésidents(res.data); //Mettre à jour les livres
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetcchAllUsers();
-  // }, []);
+  useEffect(() => {
+    const fetcchAllUsers = async () => {
+      try {
+        const res = await axios.get(
+          'http://localhost:1000/api/presiNationals/ByCategoryWhithPresiNationalId/' +
+            presiNationalId
+        ); //Recupère tous les présidents par sections ou categories de sections
+        console.log(res);
+        setPrésidents(res.data); //Mettre à jour les livres
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetcchAllUsers();
+  }, []);
 
   //Recupération des informations d'un seul presiNational
   useEffect(() => {
@@ -140,16 +140,16 @@ const PresiNationalSingleScreen = () => {
               </Card.Body>
             </Card>
           </Col>
-          {/* <Col md={4}>
+          <Col md={4}>
             {' '}
             <Card className="mb-3">
               <Card.Body>
                 Recommandations
-                <Card.Title>Presidents de la même Section</Card.Title>
+                <Card.Title>Presidents Nationaux</Card.Title>
                 {presidents.map((post) => (
                   <div className="post" key={post.id}>
                     <div className="content">
-                      <Link className="link" to={`/presiSection/${post._id}`}>
+                      <Link className="link" to={`/presiNational/${post._id}`}>
                         <span>
                           {post?.name} {post?.lastname}
                         </span>
@@ -159,7 +159,7 @@ const PresiNationalSingleScreen = () => {
                 ))}
               </Card.Body>
             </Card>{' '}
-          </Col> */}
+          </Col>
         </Row>
       </Container>
 

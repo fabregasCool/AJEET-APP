@@ -5,8 +5,7 @@ import {
   getPresiNational,
   updatePresiNational,
   createPresiNational,
-  //   getPresiNationalByCategory,
-  //   getPresiNationalByCategoryWhithPresiNationalId,
+  getPresiNationalByCategoryWhithPresiNationalId,
 } from '../controllers/presiNational.js';
 
 const router = express.Router();
@@ -26,14 +25,11 @@ router.put('/update/:id', updatePresiNational);
 //Supprimer un utilisateur
 router.delete('/delete/:id', deletePresiNational);
 
-//Recuperer et afficher les présidents de sections en fonction des categories
-//router.get('/ByCategory/:categoryId', getPresiNationalByCategory);
-
 //Recuperer et afficher les présidents de sections (mais ici on a plus besoin de recupérer l'id de la categorie mais plutot on passé par l'id du président qui se trouve dans l'url)
-// router.get(
-//   '/ByCategoryWhithPresiNationalId/:preseiSectionId',
-//   getPresiNationalByCategoryWhithPresiNationalId
-// );
+router.get(
+  '/ByCategoryWhithPresiNationalId/:preseiNationalId',
+  getPresiNationalByCategoryWhithPresiNationalId
+);
 
 //NB: En fait le "CreatePresiNational", c'est lui qui est "Register" dans "auth"
 //NB: Le middleware indque qu'on doit verifier le Token avant d'effecteur l'action

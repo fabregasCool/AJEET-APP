@@ -74,21 +74,6 @@ export const deletePresiNational = async (req, res, next) => {
   }
 };
 
-//Recuperer et afficher les présidents de sections en fonction des categories
-export const getPresiNationalByCategory = async (req, res, next) => {
-  try {
-    const catId = req.params.categoryId;
-    const list = await PresiNational.find({ cat: catId }).populate({
-      path: 'cat',
-      select: '',
-    });
-    res.status(200).json(list);
-  } catch (err) {
-    next(err);
-    res.status(501).json(err);
-  }
-};
-
 //Recuperer et afficher les présidents de sections (mais ici on a plus besoin de recupérer l'id de la categorie mais plutot on passé par l'id du président qui se trouve dans l'url)
 export const getPresiNationalByCategoryWhithPresiNationalId = async (
   req,
@@ -96,9 +81,9 @@ export const getPresiNationalByCategoryWhithPresiNationalId = async (
   next
 ) => {
   try {
-    //On recup_re le President à travers son id qui se trouve dans l'url
+    //On recupère le President à travers son id qui se trouve dans l'url
     const presiNational = await PresiNational.findById(
-      req.params.preseiSectionId
+      req.params.preseiNationalId
     ).populate({
       path: 'cat',
       select: '',
