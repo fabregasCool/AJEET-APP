@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
+// import Carousel from 'react-bootstrap/Carousel';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/esm/Button';
+
+import { Helmet } from 'react-helmet-async';
 
 export const HomeScreen = () => {
   //Declaration de notre variable qui contient les posts(articles)
@@ -30,13 +31,13 @@ export const HomeScreen = () => {
   });
 
   //Afin d'éviter que la balise "p" ne s'affiche
-  const getText = (html) => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    return doc.body.textContent;
-  };
+  // const getText = (html) => {
+  //   const doc = new DOMParser().parseFromString(html, 'text/html');
+  //   return doc.body.textContent;
+  // };
   return (
     <div>
-      <Carousel>
+      {/* <Carousel>
         <Carousel.Item>
           <img
             className="d-block w-100 Caroussel-img"
@@ -74,43 +75,31 @@ export const HomeScreen = () => {
             </p>
           </Carousel.Caption>
         </Carousel.Item>
-      </Carousel>
+      </Carousel> */}
 
       <Container className="posts">
+        <Helmet>
+          <title> Page d'accueil</title>
+        </Helmet>
         <Row>
-          <Col md={8}>
+          <Col md={10}>
             <Card className="mb-3">
               <Card.Body>
-                <Card.Title>Tous les posts</Card.Title>
+                <Card.Title className="">Tous les posts</Card.Title>
                 {posts.map((post) => (
                   <div className="post" key={post.id}>
-                    <Link className="link" to={`/post/${post._id}`}>
-                      <img
-                        src={`../upload/${post.img}`}
-                        alt=""
-                        className="img-large"
-                      />
-                      <h1>Titre du poste</h1>
-                      <Button variant="warning">{post.title}</Button>
+                    <Link className="link_post" to={`/post/${post._id}`}>
+                      <div>
+                        <img
+                          src={`../upload/${post.img}`}
+                          alt=""
+                          className="img_post"
+                        />
+                        <span>{post.title}</span>
+                      </div>
+
+                      {/* <Button variant="warning">{post.title}</Button> */}
                     </Link>
-                  </div>
-                ))}
-              </Card.Body>
-            </Card>{' '}
-          </Col>
-          {/* Affichage des Titres des posts */}
-          <Col md={4}>
-            {' '}
-            <Card className="mb-3">
-              <Card.Body>
-                <Card.Title>Tous les posts</Card.Title>
-                {posts.map((post) => (
-                  <div className="post" key={post.id}>
-                    <div className="content">
-                      <Link className="link" to={`/post/${post._id}`}>
-                        <h1>{post.title}</h1>
-                      </Link>
-                    </div>
                   </div>
                 ))}
               </Card.Body>

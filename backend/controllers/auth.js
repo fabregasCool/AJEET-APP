@@ -7,17 +7,29 @@ import { createError } from '../utils/error.js';
 //S'enregistrer (Créer un nouvel utilisateur)
 export const register = async (req, res, next) => {
   try {
-    //Cryptage du mot de passe écrit par l'utilisateur
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
+    if (req.body.password === req.body.confirm_password) {
+      //Cryptage du mot de passe écrit par l'utilisateur
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(req.body.password, salt);
 
-    //Création de l'utilisateur
-    const newUser = new User({ ...req.body, password: hash });
+      //Cryptage du mot de passe écrit par l'utilisateur
+      const salt2 = bcrypt.genSaltSync(10);
+      const hash2 = bcrypt.hashSync(req.body.confirm_password, salt2);
 
-    //...est l'outil de propagation; cette ligne signifie qu'on separe les autres infos du password
-    //Comme le password est crypté; on envoie sa version cryptée(hsah) à la base de données
+      //Création de l'utilisateur
+      const newUser = new User({
+        ...req.body,
+        password: hash,
+        confirm_password: hash2,
+      });
 
-    await newUser.save(); //Enregistrement du nouvel utilisateur
+      //...est l'outil de propagation; cette ligne signifie qu'on separe les autres infos du password
+      //Comme le password est crypté; on envoie sa version cryptée(hsah) à la base de données
+
+      await newUser.save(); //Enregistrement du nouvel utilisateur
+    } else {
+      return next(createError(400, 'Les deux mots de passes sont différents '));
+    }
 
     res.status(200).send('User has been created');
   } catch (err) {

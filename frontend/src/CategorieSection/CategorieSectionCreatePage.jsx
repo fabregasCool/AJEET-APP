@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import "./Users.scss";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const CategorieSectionCreatePage = () => {
   const navigate = useNavigate();
@@ -33,26 +36,27 @@ const CategorieSectionCreatePage = () => {
   };
 
   return (
-    <div className="add_div">
+    <div className="">
+      <Helmet>
+        <title> Créer une Categorie de Section</title>
+      </Helmet>
       {err && <p className="error">{err}</p>}
-      <div className="content">
-        {/* Insertion du Matricule */}
-        <input
+      <div className="">
+        {/* Insertion de la Catégoie */}
+        <Form.Label>Titre de la categorie ou de la section </Form.Label>
+        <Form.Control
+          className="FormControl"
           type="text"
           value={title}
-          placeholder="Matricule"
+          placeholder="Titre de la categorie ou de la section"
           onChange={(e) => setTitle(e.target.value)}
-        />
+        ></Form.Control>
+
         {/* Insertion du Nom */}
       </div>
-
-      <div className="item">
-        <div className="buttons">
-          <button onClick={handleClick}>Envoyer</button>
-          {/* Au lieu de {handleClick}, on pouvait utiliser aussi {handleSubmit } */}
-          {err && <p>{err}</p>}
-        </div>
-      </div>
+      <Button variant="success" onClick={handleClick} className="btn_send">
+        Envoyer
+      </Button>
     </div>
   );
 };

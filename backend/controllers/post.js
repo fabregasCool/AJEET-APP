@@ -1,5 +1,3 @@
-import bcrypt from 'bcryptjs';
-
 import Post from '../models/Post.js';
 
 //Recupérer tous les utilisateurs

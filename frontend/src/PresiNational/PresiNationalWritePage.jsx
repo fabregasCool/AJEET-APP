@@ -6,6 +6,14 @@ import 'react-quill/dist/quill.snow.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
+import { Helmet } from 'react-helmet-async';
+import Form from 'react-bootstrap/Form';
+
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+
 //ICI ON CREE LE PRESIDENT DE SECTION AVEC SA BIOGRAPHIE
 
 export default function PresiNationalWritePage() {
@@ -108,8 +116,87 @@ export default function PresiNationalWritePage() {
     fetcchAllUsers();
   }, []);
   return (
-    <div className="add">
-      <div className="content">
+    <div className="">
+      <Helmet>
+        <title> Créer un Président National</title>
+      </Helmet>
+      <div className="">
+        {' '}
+        <h1> Créer un Président National</h1>
+        <Form.Control
+          className="FormControl"
+          type="text"
+          value={name}
+          placeholder="name"
+          onChange={(e) => setName(e.target.value)}
+        ></Form.Control>
+        <Form.Control
+          className="FormControl"
+          type="text"
+          value={lastname}
+          placeholder="lastname"
+          onChange={(e) => setLastName(e.target.value)}
+        ></Form.Control>
+        {/* Insertion de l'éditeur de texte ReactQuill */}
+        <div className="editorContainer">
+          <ReactQuill
+            className="editor "
+            theme="snow"
+            value={value}
+            onChange={setValue}
+          />
+        </div>
+      </div>
+
+      <Row>
+        <Col md={8}>
+          <Card className="mb-3">
+            <Card.Body>
+              <Card.Title>Publier votre Post</Card.Title>
+              <Button variant="danger" className="btn_upload">
+                <input
+                  style={{ display: 'none' }}
+                  type="file"
+                  id="file"
+                  name=""
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+                <label className="file" htmlFor="file">
+                  Télécharger l'image du Président
+                </label>
+              </Button>
+              <div className="my-4">
+                <label for="">Selectionner la catégorie</label>
+                {catNationals && (
+                  <select
+                    name="cat"
+                    value={cat}
+                    onChange={(e) => setCat(e.currentTarget.value)}
+                  >
+                    <option value="">Choisir</option>
+
+                    {catNationals?.map((level) => (
+                      <option key={level._id} value={level._id}>
+                        {level?.title}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              <Button
+                variant="success"
+                onClick={handleClick}
+                className="btn_send"
+              >
+                Envoyer
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* <div className="content">
         <input
           type="text"
           value={name}
@@ -123,7 +210,7 @@ export default function PresiNationalWritePage() {
           placeholder="lastname"
           onChange={(e) => setLastName(e.target.value)}
         />
-        {/* Insertion de l'éditeur de texte ReactQuill */}
+     
         <div className="editorContainer">
           <ReactQuill
             className="editor "
@@ -132,9 +219,8 @@ export default function PresiNationalWritePage() {
             onChange={setValue}
           />
         </div>
-      </div>
-
-      <div className="menu">
+      </div> */}
+      {/* <div className="menu">
         <div className="item">
           <h1>Publish</h1>
           <span>
@@ -158,7 +244,7 @@ export default function PresiNationalWritePage() {
           <div className="buttons">
             <button>Save as a Draft</button>
             <button onClick={handleClick}>Publish</button>
-            {/* Au lieu de {handleClick}, on pouvait utiliser aussi {handleSubmit } */}
+            
           </div>
 
           <div className="item">
@@ -183,7 +269,7 @@ export default function PresiNationalWritePage() {
             )}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

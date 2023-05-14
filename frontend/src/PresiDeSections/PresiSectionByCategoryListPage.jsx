@@ -4,6 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import { Helmet } from 'react-helmet-async';
 
 const PresiSectionByCategoryListPage = () => {
   //Récupération de l'id de l'utilisateur qui se trouve dans l'url
@@ -25,7 +26,7 @@ const PresiSectionByCategoryListPage = () => {
       }
     };
     fetcchAllUsers();
-  }, []);
+  });
 
   //Créer la fonction pour supprimer un livre
   const handleDelete = async (id) => {
@@ -40,33 +41,37 @@ const PresiSectionByCategoryListPage = () => {
   };
 
   return (
-    <div className="userdiv">
+    <div className="">
+      <Helmet>
+        <title> Liste des Présidents de cette section</title>
+      </Helmet>
       <h1>Liste des Présidents de cette section </h1>
 
-      <div className="president">
+      <div className="">
         {president?.map((presi) => (
-          <div className="user" key={presi._id}>
-            <span>{presi?.name}</span>
-            <span>{presi?.lastname}</span>
-            <button
-              className="btn_delete_user"
+          <div className="" key={presi._id}>
+            <span className="presiInfo">{presi?.name}</span>
+            <span className="presiInfo">{presi?.lastname}</span>
+            <Button
+              className="btn_catsection"
               onClick={() => handleDelete(presi._id)}
+              variant="outline-danger"
             >
               Delete
-            </button>
-            <button className="btn_update_user">
+            </Button>
+            <Button className="btn_catsection" variant="outline-info">
               <Link className="link" to={`/updateUser/${presi._id}`}>
                 Update the user
               </Link>
-            </button>
+            </Button>
           </div>
         ))}
       </div>
-      <button className="btn_add_user">
+      <Button className="btn_catsection" variant="outline-warning">
         <Link className="link" to="/addUser">
           Add new User
         </Link>
-      </button>
+      </Button>
     </div>
   );
 };

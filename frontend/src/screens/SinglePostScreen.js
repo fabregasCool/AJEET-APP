@@ -13,6 +13,8 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 
+import { Helmet } from 'react-helmet-async';
+
 const SinglePostScreen = () => {
   //
 
@@ -20,6 +22,9 @@ const SinglePostScreen = () => {
   //Declaration de notre variable
   //post est la variable dans laquelle se trouve les informations d'un article(post)
   const [post, setPost] = useState({});
+
+  //Declaration de notre variable qui contient les posts(articles)
+  const [posts, setPosts] = useState([]);
 
   //Atteindre l'url
   const location = useLocation();
@@ -65,6 +70,23 @@ const SinglePostScreen = () => {
     }
   };
 
+  //Fonction useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          'http://localhost:1000/api/posts/list'
+          // `http://localhost:1000/api/posts/list`
+        );
+        setPosts(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  });
+
   //Afin d'éviter que la balise "p" ne s'affiche
   const getText = (html) => {
     const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -74,19 +96,23 @@ const SinglePostScreen = () => {
   return (
     <div className="single">
       <Container className="posts">
+        <Helmet>
+          <title> Single Post</title>
+        </Helmet>
         <Row>
-          <Col md={12}>
+          <Col md={8}>
             <Card className="mb-3">
               <img
                 src={`../upload/${post?.img}`}
                 alt=""
-                className="img-large"
+                className="img_single_post"
               />
               <div className="user">
                 {post?.userImg && (
                   <img src={`../upload/${post?.userImg}`} alt="" />
                 )}
               </div>
+
               <h1>Titre:{post?.title}</h1>
 
               {/* Si currentUser.username(nom qui se trouve dans le local storage) est égal  à post.username*/}
@@ -118,9 +144,24 @@ const SinglePostScreen = () => {
               <p>Posted {moment(post?.date).fromNow()}</p>
             </div>
             <div className="">
-              <h2>Decription</h2>
+              <h2>Decription Du Post</h2>
               <span className="desc">{getText(post?.desc)}</span>
             </div>
+          </Col>
+          <Col md={4}>
+            {' '}
+            <Card className="mb-3">
+              <Card.Body>
+                <Card.Title>Post Recommandés</Card.Title>
+                {posts.map((post) => (
+                  <div className="" key={post.id}>
+                    <Link className="post_recom" to={`/post/${post._id}`}>
+                      {post.title}
+                    </Link>
+                  </div>
+                ))}
+              </Card.Body>
+            </Card>{' '}
           </Col>
         </Row>
       </Container>

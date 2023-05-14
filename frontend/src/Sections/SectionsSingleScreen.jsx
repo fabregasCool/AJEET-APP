@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import moment from 'moment';
@@ -12,12 +12,17 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 
+import { Helmet } from 'react-helmet-async';
+import { AuthContext } from '../context/authContext';
+
 const SectionsSingleScreen = () => {
-  //
+  //Notre utilisateur actuel
+  const { currentUser } = useContext(AuthContext);
+
   //Declaration de notre variable
   //post est la variable dans laquelle se trouve les informations d'un article(post)
   const [post, setPost] = useState({});
-
+  const [postSection, setPostSection] = useState([]);
   //Atteindre l'url
   const location = useLocation();
   //Recupère l'Id du post qui est contenu dans l'url
@@ -53,11 +58,27 @@ const SectionsSingleScreen = () => {
           withCredentials: true,
         }
       );
-      navigate('/sectionBiographie'); //Si la suppression est réussie, nous sommes dirigé sur la page d'accueil
+      navigate('/postSectionsBiographie'); //Si la suppression est réussie, nous sommes dirigé sur la page d'accueil
     } catch (err) {
       console.log(err);
     }
   };
+  //Liste de toutes les sections
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          'http://localhost:1000/api/postSections/list'
+          // `http://localhost:1000/api/postSection/list`
+        );
+        setPostSection(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  });
 
   //Afin d'éviter que la balise "p" ne s'affiche
   const getText = (html) => {
@@ -66,40 +87,45 @@ const SectionsSingleScreen = () => {
   };
 
   return (
-    <div className="single">
+    <div className="">
+      <Helmet>
+        <title> Histoire de la section</title>
+      </Helmet>
+
       <Container className="posts">
         <Row>
-          <Col md={12}>
+          <Col md={8}>
             <Card className="mb-3">
               <img
                 src={`../upload/${post?.img}`}
                 alt=""
-                className="img-large"
+                className="img_single_post"
               />
               <div className="user">
                 {post?.userImg && (
                   <img src={`../upload/${post?.userImg}`} alt="" />
                 )}
               </div>
-              <h1>Titre:{post?.title}</h1>
+              <h1> Histoire de la Section : {post?.cat?.title}</h1>
 
               {/* Si currentUser.username(nom qui se trouve dans le local storage) est égal  à post.username*/}
               {/* (nom de l'utilisateur qui a crée le post), alors on affiche les boutons "modifier" et "supprimer" */}
               {/* currentUser?.userId?.isAdmin === true  */}
+              {currentUser?.isAdmin === true && (
+                <div className="edit">
+                  <Link to={`/writepostSections`} state={post}>
+                    {/* state={post} : on prend ttes les infos(id,title,desc,img,date,uid,cat) sur notre post (article) recupérés (en haut par axios) et qui sont contenu dans la variable "post*/}
+                    <img src={Edit} alt="" className="img-edit" />
+                  </Link>
 
-              <div className="edit">
-                <Link to={`/writeSection`} state={post}>
-                  {/* state={post} : on prend ttes les infos(id,title,desc,img,date,uid,cat) sur notre post (article) recupérés (en haut par axios) et qui sont contenu dans la variable "post*/}
-                  <img src={Edit} alt="" className="img-edit" />
-                </Link>
-
-                <img
-                  onClick={handleDelete}
-                  src={Delete}
-                  alt=""
-                  className="img-delete"
-                />
-              </div>
+                  <img
+                    onClick={handleDelete}
+                    src={Delete}
+                    alt=""
+                    className="img-delete"
+                  />
+                </div>
+              )}
             </Card>
             <div className="info">
               <p>Posted {moment(post?.date).fromNow()}</p>
@@ -108,6 +134,24 @@ const SectionsSingleScreen = () => {
               <h2>Decription</h2>
               <span className="desc">{getText(post?.desc)}</span>
             </div>
+          </Col>
+          <Col md={4}>
+            {' '}
+            <Card className="mb-3">
+              <Card.Body>
+                <Card.Title>Autres Sections</Card.Title>
+                {postSection.map((postsect) => (
+                  <div className="" key={postsect._id}>
+                    <Link
+                      className="post_recom"
+                      to={`/postSections/${postsect._id}`}
+                    >
+                      {postsect?.cat?.title}
+                    </Link>
+                  </div>
+                ))}
+              </Card.Body>
+            </Card>{' '}
           </Col>
         </Row>
       </Container>

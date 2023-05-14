@@ -38,6 +38,7 @@ const UsersUpdatePage = () => {
     );
     setUsername(response.data.username); //Affiche le nom utilisateur
     setEmail(response.data.email); //Affiche l'email utilisateur
+    // setPassword(response.data.password); Affiche l'email utilisateur
   };
 
   //Fonction upload image

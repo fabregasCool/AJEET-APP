@@ -11,6 +11,7 @@ import presiSectionRoutes from './routes/presiSections.js';
 import postSectionRoutes from './routes/postSections.js';
 import presiNationalRoutes from './routes/presiNationals.js';
 import catNationalRoutes from './routes/catNationals.js';
+import postAjeetNtleRoutes from './routes/postAjeetNtles.js';
 
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
@@ -107,6 +108,7 @@ app.use('/api/presiSections', presiSectionRoutes);
 app.use('/api/postSections', postSectionRoutes);
 app.use('/api/presiNationals', presiNationalRoutes);
 app.use('/api/catNationals', catNationalRoutes);
+app.use('/api/postAjeetNtles', postAjeetNtleRoutes);
 
 //Middleware Gestion des erreurs dont on a parlé dans "/controllers/auth" en Commentaire
 //Apres cette config,nous pouvopns l'utiliser partout dans nos "Controllers"

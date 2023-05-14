@@ -5,7 +5,13 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import Form from 'react-bootstrap/Form';
+
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 export default function SectionWritePage() {
   //Recupère notre currentUser stocker dans le localStorage après sa connexion
@@ -83,7 +89,7 @@ export default function SectionWritePage() {
             },
             { withCredentials: true }
           );
-      navigate('/sectionBiographie'); //Si l'article est crée sans problème, on sera dirigé vers la page d'accueil
+      navigate('/postSectionsBiographie'); //Si l'article est crée sans problème, on sera dirigé vers la page d'accueil
     } catch (err) {
       // console.log(err);
     }
@@ -104,14 +110,20 @@ export default function SectionWritePage() {
     fetcchAllUsers();
   }, []);
   return (
-    <div className="add">
-      <div className="content">
-        <input
+    <div className="write_div">
+      <Helmet>
+        <title> Histoire de Section</title>
+      </Helmet>
+      <div className="">
+        {' '}
+        <h1> Créer Histoire de Section</h1>
+        <Form.Control
+          className="FormControl"
           type="text"
           value={title}
           placeholder="title"
           onChange={(e) => setTitle(e.target.value)}
-        />
+        ></Form.Control>
         {/* Insertion de l'éditeur de texte ReactQuill */}
         <div className="editorContainer">
           <ReactQuill
@@ -122,57 +134,53 @@ export default function SectionWritePage() {
           />
         </div>
       </div>
+      <Row>
+        <Col md={8}>
+          <Card className="mb-3">
+            <Card.Body>
+              <Card.Title>Publier votre Post</Card.Title>
+              <Button variant="danger" className="btn_upload">
+                <input
+                  style={{ display: 'none' }}
+                  type="file"
+                  id="file"
+                  name=""
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+                <label className="file" htmlFor="file">
+                  Télécharger l'image
+                </label>
+              </Button>
+              <div className="my-4">
+                <label for="">Selectionner un niveau</label>
+                {catSections && (
+                  <select
+                    name="cat"
+                    value={cat}
+                    onChange={(e) => setCat(e.currentTarget.value)}
+                  >
+                    <option value="">Choisir</option>
 
-      <div className="menu">
-        <div className="item">
-          <h1>Publish</h1>
-          <span>
-            <b>Status:</b>Draft
-          </span>
-          <span>
-            <b>Visibility:</b>Public or Prive
-          </span>
+                    {catSections?.map((level) => (
+                      <option key={level._id} value={level._id}>
+                        {level.title}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
 
-          <input
-            style={{ display: 'none' }}
-            type="file"
-            id="file"
-            name=""
-            onChange={(e) => setFile(e.target.files[0])}
-          />
-          <label className="file" htmlFor="file">
-            Télécharger l'image
-          </label>
-
-          <div className="buttons">
-            <button>Save as a Draft</button>
-            <button onClick={handleClick}>Publish</button>
-            {/* Au lieu de {handleClick}, on pouvait utiliser aussi {handleSubmit } */}
-          </div>
-
-          <div className="item">
-            <h1>Category</h1>
-          </div>
-          <div className="my-4">
-            <label for="">Selectionner un niveau</label>
-            {catSections && (
-              <select
-                name="cat"
-                value={cat}
-                onChange={(e) => setCat(e.currentTarget.value)}
+              <Button
+                variant="success"
+                onClick={handleClick}
+                className="btn_send"
               >
-                <option value="">Choisir</option>
-
-                {catSections?.map((level) => (
-                  <option key={level._id} value={level._id}>
-                    {level.title}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-        </div>
-      </div>
+                Envoyer
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }

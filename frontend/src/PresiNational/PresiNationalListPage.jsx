@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import { Helmet } from 'react-helmet-async';
+import { AuthContext } from '../context/authContext';
 
 //AFFICHE TOUS LES PRESIDENTS DE SECTION
 const PresiNationalListPage = () => {
+  //Notre utilisateur actuel
+  const { currentUser } = useContext(AuthContext);
+
   //Déclaration de la variable qui va recevoir tous les utilisateurs
   const [president, setPresident] = useState([]);
 
@@ -25,8 +31,11 @@ const PresiNationalListPage = () => {
   }, []);
 
   return (
-    <div className="userdiv">
-      <h1>Liste des Présidents de Section </h1>
+    <div className="">
+      <Helmet>
+        <title> Liste des Présidents Natioanux</title>
+      </Helmet>
+      <h1>Liste des Présidents Natioanux </h1>
 
       <div className="president">
         {president?.map((presi) => (
@@ -36,22 +45,26 @@ const PresiNationalListPage = () => {
               src={`../upload/${presi?.img}`}
               alt=""
             />
-            <span>{presi?.name}</span>
-            <span>{presi?.lastname}</span>{' '}
-            <span>Section : {presi?.cat?.title}</span>
-            <button className="btn_update_user">
+            <span className="presiInfo">{presi?.name}</span>
+            <span className="presiInfo">{presi?.lastname}</span>{' '}
+            <em>
+              Catégorie :<span className="presiInfo"> {presi?.cat?.title}</span>
+            </em>
+            <Button className="btn_presiSectionList" variant="outline-info">
               <Link className="link" to={`/presiNational/${presi._id}`}>
                 Details du President
               </Link>
-            </button>
+            </Button>
           </div>
         ))}
       </div>
-      <button className="btn_add_user">
-        <Link className="link" to="/writeBiographiePresiNational">
-          Créer un nouveau Président de Section
-        </Link>
-      </button>
+      {currentUser?.isAdmin === true && (
+        <Button className="btn_presiAdd" variant="outline-warning">
+          <Link className="link" to="/writeBiographiePresiNational">
+            Créer un nouveau Président de Section
+          </Link>
+        </Button>
+      )}
     </div>
   );
 };

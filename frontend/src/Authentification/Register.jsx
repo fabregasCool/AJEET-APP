@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { Helmet } from 'react-helmet-async';
+import Alert from 'react-bootstrap/Alert';
 
 const Register = () => {
   //Declaration des variables
@@ -12,6 +13,7 @@ const Register = () => {
     username: '',
     email: '',
     password: '',
+    confirm_password: '',
   });
 
   //Utilisation de useNavigate
@@ -31,96 +33,80 @@ const Register = () => {
     e.preventDefault();
     try {
       await axios.post('http://localhost:1000/api/auth/register', inputs);
-      navigate('/login');
+      navigate('/usersList');
       //console.log(res);
     } catch (err) {
       // console.log(err);
-      setError(err?.response?.data); //Afiiche l'erreur de la console
+      setError(err?.response?.data.message); //Afiiche l'erreur de la console
     }
   };
   //console.log(inputs);
 
   return (
-    <div className="auth">
-      {/* <h1>Register</h1>
-      <form>
-        <input
-          required
-          type="text"
-          placeholder="username"
-          name="username"
-          onChange={handleChange}
-        />
-        <input
-          required
-          type="email"
-          placeholder="email"
-          name="email"
-          onChange={handleChange}
-        />
-        <input
-          required
-          type="password"
-          placeholder="password"
-          name="password"
-          onChange={handleChange}
-        />
-        <button onClick={handleSubmit}>Register</button>
-       
-        {err && <p>{err}</p>}
-        <span>
-          Do you have account?<Link to="/login">Login</Link>
-        </span>
-      </form> */}
-      <Container>
-        <Helmet>
-          <title> Creer un Compte</title>
-        </Helmet>
-        <h1 className="my-3">S'enregistrer</h1>
-        <Form>
-          <Form.Group className="mb-3" controlId="username">
-            <Form.Label>Username </Form.Label>
-            <Form.Control
-              required
-              type="text"
-              placeholder="username"
-              name="username"
-              onChange={handleChange}
-            ></Form.Control>
-          </Form.Group>
+    <Container className="auth_register">
+      <Helmet>
+        <title> Créer un Nouvel Utilisateur</title>
+      </Helmet>
+      <h1 className="my-3">Créer un Nouvel Utilisateur</h1>
+      <Form className="form_register">
+        <Form.Group className="mb-3" controlId="username">
+          <Form.Label>Username </Form.Label>
+          <Form.Control
+            className="FormControl"
+            required
+            type="text"
+            placeholder="username"
+            name="username"
+            onChange={handleChange}
+          ></Form.Control>
+        </Form.Group>
 
-          <Form.Group className="mb-3" controlId="email">
-            <Form.Label>Email </Form.Label>
-            <Form.Control
-              required
-              type="email"
-              name="email"
-              autocomplete="on"
-              onChange={handleChange}
-            />
-          </Form.Group>
+        <Form.Group className="mb-3" controlId="email">
+          <Form.Label>Email </Form.Label>
+          <Form.Control
+            required
+            type="email"
+            name="email"
+            autocomplete="on"
+            onChange={handleChange}
+          />
+        </Form.Group>
 
-          <Form.Group className="mb-3" controlId="password">
-            <Form.Label>Password </Form.Label>
-            <Form.Control
-              required
-              type="password"
-              name="password"
-              autocomplete="on"
-              onChange={handleChange}
-            />
-          </Form.Group>
+        <Form.Group className="mb-3" controlId="password">
+          <Form.Label>Password </Form.Label>
+          <Form.Control
+            required
+            type="password"
+            name="password"
+            autocomplete="on"
+            onChange={handleChange}
+          />
+        </Form.Group>
 
-          <div className="mb-3">
-            <Button onClick={handleSubmit}>Login</Button>
-            {err && <p>{err}</p>}
-            {/* <span>
+        <Form.Group className="mb-3" controlId="confirm_password">
+          <Form.Label>Confirm Password </Form.Label>
+          <Form.Control
+            required
+            type="confirm_password"
+            name="confirm_password"
+            autocomplete="on"
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <div className="mb-3">
+          {err && <p>{err}</p>}
+          {err && <Alert variant="danger">{err}</Alert>}
+          <Button variant="primary" onClick={handleSubmit}>
+            Register
+          </Button>
+
+          {/* <span>
           Don't you have account?<Link to="/register">Register</Link>
         </span> */}
-          </div>
-        </Form>
-      </Container>
-    </div>
+        </div>
+      </Form>
+    </Container>
   );
 };
 

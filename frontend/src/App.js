@@ -2,13 +2,14 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { HomeScreen } from './screens/HomeScreen';
 import Footer from './Components/Footer';
 import Menu from './Components/Menu';
-import HistoriqueScreen from './screens/HistoriqueScreen';
+
 import Login from './Authentification/Login';
 import Register from './Authentification/Register';
 import WriteScreen from './screens/WriteScreen';
 
 import UsersListPage from './Users/UsersListPage';
 import UsersUpdatePage from './Users/UsersUpdatePage';
+
 import SinglePostScreen from './screens/SinglePostScreen';
 
 import { PostSectionByCategory } from './screens/PostSectionByCategory';
@@ -28,6 +29,10 @@ import PresiSectionSingleScreen from './PresiDeSections/PresiSectionSingleScreen
 import PresiNationalListPage from './PresiNational/PresiNationalListPage';
 import PresiNationalSingleScreen from './PresiNational/PresiNationalSingleScreen';
 import PresiNationalWritePage from './PresiNational/PresiNationalWritePage';
+import { DashboardScreen } from './screens/DashboardScreen';
+import { AjeetNtleBiographie } from './AjeetNationale/AjeetNtleBiographie';
+import AjeetNtleSingleScreen from './AjeetNationale/AjeetNtleSingleScreen';
+import AjeetNtleWritePage from './AjeetNationale/AjeetNtleWritePage';
 
 //Fonction Layout
 const Layout = () => {
@@ -45,12 +50,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: '/home',
+        path: '/',
         element: <HomeScreen />,
-      },
-      {
-        path: '/historique',
-        element: <HistoriqueScreen />,
       },
 
       // Debut Post
@@ -74,34 +75,35 @@ const router = createBrowserRouter([
         path: '/updateUser/:id',
         element: <UsersUpdatePage />,
       },
+
       //Fin User
 
       //Debut Section
       {
-        // Afficher les Posts de Section par Categories
+        // Afficher toutes les Section (En réalité c'est les categories qu'on affiche; car une catégorie represente ici une section)
         path: '/sectionsList',
         element: <SectionsListPage />,
       },
 
       {
-        // Modifier une Section
+        // Modifier une Section (En réalité c'est la categorie on modifie; car une catégorie represente ici une section)
         path: '/updateSection/:id',
         element: <SectionsUpdatePage />,
       },
       {
         // Créer Intro de la section
-        path: '/writeSection',
+        path: '/writepostSections',
         element: <SectionWritePage />,
       },
       {
         // Liste des Intro Section (Biographie)
-        path: '/sectionBiographie',
+        path: '/postSectionsBiographie',
         element: <SectionsBiographie />,
       },
 
       {
         //Post single d'une section
-        path: '/section/:id',
+        path: '/postSections/:id',
         element: <SectionsSingleScreen />,
       },
 
@@ -119,7 +121,7 @@ const router = createBrowserRouter([
         element: <CategorieSectionListPage />,
       },
       {
-        // Modifier une catégorieSection
+        // Modifier une catégorieSection (ça represente aussi la section car ici section==catSection)
         path: '/updateCatSection/:id',
         element: <CategorieSectionUpdatePage />,
       },
@@ -175,8 +177,26 @@ const router = createBrowserRouter([
         element: <PresiNationalWritePage />,
       },
       //Fin PresiNational
+
+      //AJEET NTIOONALE
+      {
+        //  Biographie de l'AJEET NATIONALE
+        path: '/postAjeetNtleBiographie',
+        element: <AjeetNtleBiographie />,
+      },
+      {
+        //Post single de l'AJEET Nationale
+        path: '/postAjeetNtle/:id',
+        element: <AjeetNtleSingleScreen />,
+      },
+      {
+        // Créer Intro de la section
+        path: '/writepostAjeetNtle',
+        element: <AjeetNtleWritePage />,
+      },
     ],
   },
+  // Les éléments ici n'auront pas le menu
   {
     path: '/login',
     element: <Login />,
@@ -185,6 +205,10 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register />,
+  },
+  {
+    path: '/dashboard',
+    element: <DashboardScreen />,
   },
 ]);
 function App() {

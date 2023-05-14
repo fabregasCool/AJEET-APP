@@ -7,6 +7,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { AuthContext } from '../context/authContext';
 
+import { Helmet } from 'react-helmet-async';
+import Form from 'react-bootstrap/Form';
+
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+
 export default function WriteScreen() {
   //Recupère notre currentUser stocker dans le localStorage après sa connexion
   const { currentUser } = useContext(AuthContext);
@@ -79,21 +87,26 @@ export default function WriteScreen() {
             },
             { withCredentials: true }
           );
-      navigate('/home'); //Si l'article est crée sans problème, on sera dirigé vers la page d'accueil
+      navigate('/'); //Si l'article est crée sans problème, on sera dirigé vers la page d'accueil
     } catch (err) {
       // console.log(err);
     }
   };
 
   return (
-    <div className="add">
-      <div className="content">
-        <input
+    <div className="write_div">
+      <Helmet>
+        <title> Créer un Post</title>
+      </Helmet>
+      <div className="">
+        <h1> Créer un Post</h1>
+        <Form.Control
+          className="FormControl"
           type="text"
           value={title}
-          placeholder="title"
+          placeholder="Titre du Post"
           onChange={(e) => setTitle(e.target.value)}
-        />
+        ></Form.Control>
         {/* Insertion de l'éditeur de texte ReactQuill */}
         <div className="editorContainer">
           <ReactQuill
@@ -104,8 +117,37 @@ export default function WriteScreen() {
           />
         </div>
       </div>
+      <Row>
+        <Col md={8}>
+          <Card className="mb-3">
+            <Card.Body>
+              <Card.Title>Publier votre Post</Card.Title>
+              <Button variant="danger" className="btn_upload">
+                <input
+                  style={{ display: 'none' }}
+                  type="file"
+                  id="file"
+                  name=""
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+                <label className="file" htmlFor="file">
+                  Télécharger l'image
+                </label>
+              </Button>
 
-      <div className="menu">
+              <Button
+                variant="success"
+                onClick={handleClick}
+                className="btn_send"
+              >
+                Envoyer
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* <div className="menu">
         <div className="item">
           <h1>Publish</h1>
           <span>
@@ -129,10 +171,10 @@ export default function WriteScreen() {
           <div className="buttons">
             <button>Save as a Draft</button>
             <button onClick={handleClick}>Publish</button>
-            {/* Au lieu de {handleClick}, on pouvait utiliser aussi {handleSubmit } */}
+            
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

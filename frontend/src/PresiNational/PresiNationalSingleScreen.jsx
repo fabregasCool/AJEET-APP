@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import moment from 'moment';
 
 import Edit from '../img/edit.png';
 import Delete from '../img/delete.png';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 
+import { Helmet } from 'react-helmet-async';
+import { AuthContext } from '../context/authContext';
+
 const PresiNationalSingleScreen = () => {
-  //
+  //Notre utilisateur actuel
+  const { currentUser } = useContext(AuthContext);
+
   //Declaration de notre variable
   //presiNational est la variable dans laquelle se trouve les informations d'un article(presiNational)
   const [presiNational, setPresiNatioinal] = useState({});
@@ -32,8 +37,7 @@ const PresiNationalSingleScreen = () => {
     const fetcchAllUsers = async () => {
       try {
         const res = await axios.get(
-          'http://localhost:1000/api/presiNationals/ByCategoryWhithPresiNationalId/' +
-            presiNationalId
+          'http://localhost:1000/api/presiNationals/list'
         ); //Recupère tous les présidents par sections ou categories de sections
         console.log(res);
         setPrésidents(res.data); //Mettre à jour les livres
@@ -84,45 +88,45 @@ const PresiNationalSingleScreen = () => {
   };
 
   return (
-    <div className="single">
+    <div className="">
+      <Helmet>
+        <title> Page d'un Président National</title>
+      </Helmet>
+      <h1> Page d'un Président National</h1>
       <Container className="posts">
         <Row>
           <Col md={12}>
             <Card className="mb-3">
-              <img
-                src={`../upload/${presiNational?.img}`}
-                alt=""
-                className="img-large"
-              />
-              <div className="user">
+              {/* <div className="user">
                 {presiNational?.userImg && (
                   <img src={`../upload/${presiNational?.userImg}`} alt="" />
                 )}
-              </div>
-              <h1>
-                Nom et Prenom :{presiNational?.name} {presiNational?.lastname}
-              </h1>
+              </div> */}
+              <h2>
+                Nom et Prenoms : {presiNational?.name} {presiNational?.lastname}
+              </h2>
 
               {/* Si currentUser.username(nom qui se trouve dans le local storage) est égal  à presiNational.username*/}
               {/* (nom de l'utilisateur qui a crée le presiNational), alors on affiche les boutons "modifier" et "supprimer" */}
               {/* currentUser?.userId?.isAdmin === true  */}
+              {currentUser?.isAdmin === true && (
+                <div className="edit">
+                  <Link
+                    to={`/writeBiographiePresiNational`}
+                    state={presiNational}
+                  >
+                    {/* state={presiNational} : on prend ttes les infos(id,title,desc,img,date,uid,cat) sur notre presiNational (article) recupérés (en haut par axios) et qui sont contenu dans la variable "presiNational*/}
+                    <img src={Edit} alt="" className="img-edit" />
+                  </Link>
 
-              <div className="edit">
-                <Link
-                  to={`/writeBiographiePresiNational`}
-                  state={presiNational}
-                >
-                  {/* state={presiNational} : on prend ttes les infos(id,title,desc,img,date,uid,cat) sur notre presiNational (article) recupérés (en haut par axios) et qui sont contenu dans la variable "presiNational*/}
-                  <img src={Edit} alt="" className="img-edit" />
-                </Link>
-
-                <img
-                  onClick={handleDelete}
-                  src={Delete}
-                  alt=""
-                  className="img-delete"
-                />
-              </div>
+                  <img
+                    onClick={handleDelete}
+                    src={Delete}
+                    alt=""
+                    className="img-delete"
+                  />
+                </div>
+              )}
             </Card>
             <div className="info">
               <p>Posted {moment(presiNational?.date).fromNow()}</p>
@@ -133,10 +137,28 @@ const PresiNationalSingleScreen = () => {
           <Col md={8}>
             {' '}
             <Card className="mb-3">
-              <Card.Body>
+              {/* <Card.Body>
                 <Card.Title>Decription</Card.Title>
-
                 <span className="desc">{getText(presiNational?.desc)}</span>
+              </Card.Body> */}
+
+              <Card.Body>
+                <p className="flotter">
+                  <img
+                    src={`../upload/${presiNational?.img}`}
+                    alt=""
+                    className="img_presi_profile"
+                  />
+                </p>
+
+                <p>
+                  <p className="desc_title">Decription Du Président</p>
+                  <span className="desc_presi">
+                    {getText(presiNational?.desc)}{' '}
+                  </span>
+                </p>
+
+                <p class="dessous"></p>
               </Card.Body>
             </Card>
           </Col>
@@ -145,7 +167,7 @@ const PresiNationalSingleScreen = () => {
             <Card className="mb-3">
               <Card.Body>
                 Recommandations
-                <Card.Title>Presidents Nationaux</Card.Title>
+                <Card.Title>Tous les Presidents Nationaux</Card.Title>
                 {presidents.map((post) => (
                   <div className="post" key={post.id}>
                     <div className="content">

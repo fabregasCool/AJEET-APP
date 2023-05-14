@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/esm/Button';
 
 const UsersListPage = () => {
   //Déclaration de la variable qui va recevoir tous les utilisateurs
@@ -43,26 +44,27 @@ const UsersListPage = () => {
               src={`../upload/${user?.img}`}
               alt=""
             />
-            <span>{user?.username}</span>
-            <button
-              className="btn_delete_user"
+            <span className="username">{user?.username}</span>
+            <Button
+              variant="outline-danger"
+              className="btn_usersList"
               onClick={() => handleDelete(user._id)}
             >
               Delete
-            </button>
-            <button className="btn_update_user">
+            </Button>
+            <Button className="btn_usersList" variant="outline-info">
               <Link className="link" to={`/updateUser/${user._id}`}>
                 Update the user
               </Link>
-            </button>
+            </Button>
           </div>
         ))}
       </div>
-      <button className="btn_add_user">
-        <Link className="link" to="/addUser">
+      <Button className="" variant="outline-warning">
+        <Link className="link" to="/register">
           Add new User
         </Link>
-      </button>
+      </Button>
     </div>
   );
 };

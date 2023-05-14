@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import moment from 'moment';
 
 import Edit from '../img/edit.png';
 import Delete from '../img/delete.png';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
+import { Helmet } from 'react-helmet-async';
+import { AuthContext } from '../context/authContext';
 
 const PresiSectionSingleScreen = () => {
-  //
+  //Notre utilisateur actuel
+  const { currentUser } = useContext(AuthContext);
+
   //Declaration de notre variable
   //presisection est la variable dans laquelle se trouve les informations d'un article(presisection)
   const [presisection, setPresiSection] = useState({});
@@ -42,7 +46,7 @@ const PresiSectionSingleScreen = () => {
       }
     };
     fetcchAllUsers();
-  }, []);
+  });
 
   //Recupération des informations d'un seul presisection
   useEffect(() => {
@@ -84,42 +88,48 @@ const PresiSectionSingleScreen = () => {
   };
 
   return (
-    <div className="single">
+    <div className="">
+      <Helmet>
+        <title> Page 'un Président de section</title>
+      </Helmet>
+      <h1> Page d'un Président de section</h1>
+
       <Container className="posts">
         <Row>
           <Col md={12}>
             <Card className="mb-3">
-              <img
-                src={`../upload/${presisection?.img}`}
-                alt=""
-                className="img-large"
-              />
-              <div className="user">
+              {/* <div className="user">
                 {presisection?.userImg && (
                   <img src={`../upload/${presisection?.userImg}`} alt="" />
                 )}
-              </div>
-              <h1>
-                Nom et Prenom :{presisection?.name} {presisection?.lastname}
-              </h1>
+              </div> */}
+              <h2>
+                Nom et Prenoms du Président: {presisection?.name}{' '}
+                {presisection?.lastname}
+              </h2>
 
               {/* Si currentUser.username(nom qui se trouve dans le local storage) est égal  à presisection.username*/}
               {/* (nom de l'utilisateur qui a crée le presisection), alors on affiche les boutons "modifier" et "supprimer" */}
               {/* currentUser?.userId?.isAdmin === true  */}
 
-              <div className="edit">
-                <Link to={`/writeBiographiePresiSection`} state={presisection}>
-                  {/* state={presisection} : on prend ttes les infos(id,title,desc,img,date,uid,cat) sur notre presisection (article) recupérés (en haut par axios) et qui sont contenu dans la variable "presisection*/}
-                  <img src={Edit} alt="" className="img-edit" />
-                </Link>
+              {currentUser?.isAdmin === true && (
+                <div className="edit">
+                  <Link
+                    to={`/writeBiographiePresiSection`}
+                    state={presisection}
+                  >
+                    {/* state={presisection} : on prend ttes les infos(id,title,desc,img,date,uid,cat) sur notre presisection (article) recupérés (en haut par axios) et qui sont contenu dans la variable "presisection*/}
+                    <img src={Edit} alt="" className="img-edit" />
+                  </Link>
 
-                <img
-                  onClick={handleDelete}
-                  src={Delete}
-                  alt=""
-                  className="img-delete"
-                />
-              </div>
+                  <img
+                    onClick={handleDelete}
+                    src={Delete}
+                    alt=""
+                    className="img-delete"
+                  />
+                </div>
+              )}
             </Card>
             <div className="info">
               <p>Posted {moment(presisection?.date).fromNow()}</p>
@@ -131,9 +141,22 @@ const PresiSectionSingleScreen = () => {
             {' '}
             <Card className="mb-3">
               <Card.Body>
-                <Card.Title>Decription</Card.Title>
+                <p className="flotter">
+                  <img
+                    src={`../upload/${presisection?.img}`}
+                    alt=""
+                    className="img_presi_profile"
+                  />
+                </p>
 
-                <span className="desc">{getText(presisection?.desc)}</span>
+                <p>
+                  <p className="desc_title">Decription Du Président</p>
+                  <span className="desc_presi">
+                    {getText(presisection?.desc)}{' '}
+                  </span>
+                </p>
+
+                <p class="dessous"></p>
               </Card.Body>
             </Card>
           </Col>
