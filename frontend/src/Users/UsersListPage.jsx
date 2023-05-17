@@ -20,7 +20,7 @@ const UsersListPage = () => {
       }
     };
     fetcchAllUsers();
-  }, []);
+  });
 
   //Créer la fonction pour supprimer un livre
   const handleDelete = async (id) => {
